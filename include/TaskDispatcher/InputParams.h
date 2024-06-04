@@ -1,7 +1,8 @@
 #pragma once
 #include <optional>
 #include <string>
-#include <boost/program_options.hpp>
+//#include <boost/program_options.hpp>
+#include <cli/cli.hpp>
 #include <fmt/format.h>
 
 enum class InterpolationMethod {
@@ -29,16 +30,16 @@ private:
 	int outputImageHeight{};
 
 	template<typename T>
-	void setParam(const std::string& key, T& field, const boost::program_options::variables_map& vm) {
+	void setParam(const std::string& key, T& field, const CLI::App& vm) {
 		if (vm.count(key)) {
-			field = vm[key].as<T>();
+			field = vm[key]->as<T>();
 		}
 	}
 
 	template<typename SourceType, typename DestinationType>
-	void setParam(const std::string& key, DestinationType& field, const boost::program_options::variables_map& vm, const std::function<bool(SourceType)>& verificationFunction) {
+	void setParam(const std::string& key, DestinationType& field, const CLI::App& vm, const std::function<bool(SourceType)>& verificationFunction) {
 		if (vm.count(key)) {
-			const auto value = vm[key].as<SourceType>();
+			const auto value = vm[key]->as<SourceType>();
 			if (!verificationFunction(value)) {
 				const auto message = fmt::format("Incorrect value for {} ({})", key, value);
 				throw std::runtime_error(message.c_str());
@@ -48,9 +49,9 @@ private:
 	}
 
 public:
-	explicit InputParams(boost::program_options::variables_map&& vm);
+	explicit InputParams(CLI::App&& vm);
 	InputParams() = default;
-	void parseInputParams(boost::program_options::variables_map&& vm);
+	void parseInputParams(CLI::App&& vm);
 
 	ProcessingMode getProcessingMode() const;
 	bool getShowHelp() const;
@@ -73,7 +74,7 @@ public:
 
 // Value for booleans is based on the param existence
 template<>
-inline void InputParams::setParam<bool>(const std::string& key, bool& field, const boost::program_options::variables_map& vm) {
+inline void InputParams::setParam<bool>(const std::string& key, bool& field, const CLI::App& vm) {
 	if (vm.count(key)) {
 		field = true;
 	}

@@ -1,5 +1,6 @@
 [requires]
-boost/1.84.0
+cli11/2.4.2
+
 opencv/4.9.0
 eigen/3.4.0
 fmt/10.2.1
@@ -19,6 +20,7 @@ cmake_layout
 boost/1.84.0:numa=False
 boost/1.84.0:zlib=False
 boost/1.84.0:bzip2=False
+boost/1.84.0:without_cobalt=True
 boost/1.84.0:without_log=True
 boost/1.84.0:without_url=True
 boost/1.84.0:without_json=True

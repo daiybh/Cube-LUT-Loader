@@ -6,8 +6,10 @@ endif()
 find_package(OpenCV REQUIRED)
 message(STATUS "OpenCV include dir: ${OpenCV_INCLUDE_DIRS}")
 
-find_package(Boost REQUIRED COMPONENTS program_options)
-message(STATUS "Boost include dir: ${Boost_INCLUDE_DIRS}")
+#find_package(Boost REQUIRED COMPONENTS program_options)
+#message(STATUS "Boost include dir: ${Boost_INCLUDE_DIRS}")
+
+find_package(cli11 REQUIRED)
 
 find_package(Eigen3 3.4 REQUIRED NO_MODULE)
 find_package(fmt REQUIRED)

@@ -92,7 +92,22 @@ int TaskDispatcher::start()
 }
 
 InputParams TaskDispatcher::parseInputArgs(std::string& helpText) const
-{
+{	
+	CLI::App app("cube_lut_loader");
+	app.add_option("-i,--input", "Input file path")->required();
+	app.add_option("-l,--lut", "LUT file path")->required();
+	app.add_option("-o,--output", "Output file path [= out.png]");
+	app.add_option("-f,--force", "Force overwrite file");
+	app.add_option("-s,--strength", "Strength of the effect [= 1.0]");
+	app.add_option("-t,--trilinear", "Trilinear interpolation of 3D LUT");
+	app.add_option("-n,--nearest_value", "No interpolation of 3D LUT");
+	app.add_option("-j,--threads", "Number of threads [= Number of physical threads]");
+	app.add_option("-g,--gpu", "Use GPU acceleration");
+	app.add_option("-w,--width", "Output image width");
+	app.add_option("-x,--height", "Output image height");
+	//app.add_option("--help", "Help screen");
+	app.parse(argCount, args);
+	/*
 	boost::program_options::options_description desc{"Options"};
 	desc.add_options()
 	("help,h", "Help screen")
@@ -119,11 +134,11 @@ InputParams TaskDispatcher::parseInputArgs(std::string& helpText) const
 		InputParams params;
 		params.setShowHelp(true);
 		return params;
-	}
-
+	}/**/
+#define vm app
 	if (!vm.count("input") || !vm.count("lut"))
 	{
-		throw boost::program_options::error("No input image/LUT specified!");
+		//throw boost::program_options::error("No input image/LUT specified!");
 	}
 
 	if (vm.count("trilinear") && vm.count("nearest_value")) {

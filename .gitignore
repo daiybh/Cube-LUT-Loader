@@ -57,3 +57,4 @@ CMakeUserPresets.json
 # Other
 *.cube
 !*src/test/resources/*
+.vsconan/

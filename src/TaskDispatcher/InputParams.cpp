@@ -1,10 +1,10 @@
 #include "TaskDispatcher/InputParams.h"
 
-InputParams::InputParams(boost::program_options::variables_map&& vm) {
+InputParams::InputParams(CLI::App&& vm) {
 	parseInputParams(std::move(vm));
 }
 
-void InputParams::parseInputParams(boost::program_options::variables_map&& vm) {
+void InputParams::parseInputParams(CLI::App&& vm) {
 	if (vm.count("gpu")) {
 		processingMode = ProcessingMode::GPU;
 	}
