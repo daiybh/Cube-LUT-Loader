@@ -1,6 +1,6 @@
 #include <ImageProcessing/ImageProcessor.hpp>
 //#include <boost/program_options.hpp>
-#include <fmt/format.h>
+#include <format>
 #include <iostream>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
@@ -20,7 +20,7 @@ cv::Mat ImageProcessor::resizeImage(cv::Mat inputImg, cv::Size size, int interpo
 	}
 	size.width = width ? width : inputImg.size().width;
 	size.height = height ? height : inputImg.size().height;
-	std::cout << fmt::format("[INFO] Scaling image to {}x{}\n", size.width, size.height);
+	std::cout << std::format("[INFO] Scaling image to {}x{}\n", size.width, size.height);
 	cv::Mat newImage;
 	cv::resize(inputImg, newImage, size, 0, 0, interpolationMode);
 	return newImage;

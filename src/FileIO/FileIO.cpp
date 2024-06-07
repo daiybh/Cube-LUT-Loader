@@ -4,7 +4,7 @@
 #include <filesystem>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include <fmt/format.h>
+#include <format>
 
 FileIO::FileIO(const InputParams& params)
 	: inputPath(params.getInputImgPath()), outputPath(params.getOutputImgPath()), lutPath(params.getInputLutPath()),
@@ -14,7 +14,7 @@ bool FileIO::loadImg() {
 	std::cout << "[INFO] Importing image...\n";
 	const auto sourceImg = readImage(inputPath);
 	if (sourceImg.empty()) {
-		std::cerr << fmt::format("[ERROR] Could not open input image file: {}\n", inputPath);
+		std::cerr << std::format("[ERROR] Could not open input image file: {}\n", inputPath);
 		return false;
 	}
 	img = sourceImg;
@@ -40,14 +40,14 @@ bool FileIO::loadLut()
 	std::ifstream infile(lutPath);
 	if (!infile.good())
 	{
-		std::cerr << fmt::format("[ERROR] Could not open input LUT file: {}\n", lutPath);
+		std::cerr << std::format("[ERROR] Could not open input LUT file: {}\n", lutPath);
 		return false;
 	}
 	std::cout << "[INFO] Parsing LUT...\n";
 	try {
 		cube->loadCubeFile(infile);
 	} catch (const std::runtime_error& ex) {
-		std::cerr << fmt::format("[ERROR] {}\n", ex.what());
+		std::cerr << std::format("[ERROR] {}\n", ex.what());
 		success = false;
 	}
 	infile.close();
@@ -74,15 +74,15 @@ bool FileIO::fileExists(std::error_code& ec) const {
 }
 
 bool FileIO::saveImg(cv::Mat newImg) const {
-	std::cout << fmt::format("[INFO] Saving image to: {}\n", outputPath);
+	std::cout << std::format("[INFO] Saving image to: {}\n", outputPath);
 	if (!forceOverwrite) {
 		std::error_code ec;
 		const auto alreadyExists = fileExists(ec);
 		if (ec) {
-			std::cerr << fmt::format("[ERROR] Failed to check if the file exists: {} {}\n", ec.value(), ec.message());
+			std::cerr << std::format("[ERROR] Failed to check if the file exists: {} {}\n", ec.value(), ec.message());
 			return false;
 		} else if (alreadyExists) {
-			std::cerr << fmt::format("[ERROR] File {} already exists. Use -f to force overwrite.\n", outputPath);
+			std::cerr << std::format("[ERROR] File {} already exists. Use -f to force overwrite.\n", outputPath);
 			return false;
 		}
 	}
@@ -91,11 +91,11 @@ bool FileIO::saveImg(cv::Mat newImg) const {
 	try {
 		success = writeImage(outputPath, newImg);
 	} catch (cv::Exception& ex) {
-		std::cerr << fmt::format("[ERROR] {}\n", ex.what());
+		std::cerr << std::format("[ERROR] {}\n", ex.what());
 		return false;
 	}
 	if (!success) {
-		std::cerr << fmt::format("[ERROR] Failed to save the file: {}\n", outputPath);
+		std::cerr << std::format("[ERROR] Failed to save the file: {}\n", outputPath);
 		return false;
 	}
 	return true;

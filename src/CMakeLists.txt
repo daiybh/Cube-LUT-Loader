@@ -12,7 +12,6 @@ message(STATUS "OpenCV include dir: ${OpenCV_INCLUDE_DIRS}")
 find_package(cli11 REQUIRED)
 
 find_package(Eigen3 3.4 REQUIRED NO_MODULE)
-find_package(fmt REQUIRED)
 
 # Configure the main program library
 add_library(${MAIN_LIB_NAME} STATIC)

@@ -3,7 +3,7 @@
 #include <string>
 //#include <boost/program_options.hpp>
 #include <cli/cli.hpp>
-#include <fmt/format.h>
+#include <format>
 
 enum class InterpolationMethod {
 	Trilinear,
@@ -41,7 +41,7 @@ private:
 		if (vm.count(key)) {
 			const auto value = vm[key]->as<SourceType>();
 			if (!verificationFunction(value)) {
-				const auto message = fmt::format("Incorrect value for {} ({})", key, value);
+				const auto message = std::format("Incorrect value for {} ({})", key, value);
 				throw std::runtime_error(message.c_str());
 			}
 			field = static_cast<DestinationType>(value);

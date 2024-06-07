@@ -2,7 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <fmt/format.h>
+#include <format>
 
 /**
  * @file CubeLUT.cpp
@@ -68,7 +68,7 @@ float CubeLUT::parseColorValue(std::istringstream& line, unsigned char channel) 
 		if (!domainViolationDetected)
 		{
 			domainViolationDetected = true;
-			std::cerr << fmt::format("[WARNING] Detected LUT values outside of domain <{} - {}>. Clipping the input.\n", domainMin[channel], domainMax[channel]);
+			std::cerr << std::format("[WARNING] Detected LUT values outside of domain <{} - {}>. Clipping the input.\n", domainMin[channel], domainMax[channel]);
 		}
 		tmp = clipValue(tmp, channel);
 	}
@@ -145,7 +145,7 @@ bool CubeLUT::parseLUTParameters(std::istream& infile, std::streamoff& linePos) 
 			line >> size;
 			if (size < LUT_1D_MIN_SIZE || size > LUT_1D_MAX_SIZE)
 			{
-				const auto errorMsg = fmt::format("1D LUT size ({}) is out of range <{}, {}>", size, LUT_1D_MIN_SIZE, LUT_1D_MAX_SIZE);
+				const auto errorMsg = std::format("1D LUT size ({}) is out of range <{}, {}>", size, LUT_1D_MIN_SIZE, LUT_1D_MAX_SIZE);
 				throw std::runtime_error(errorMsg);
 			}
 			type = LUTType::LUT1D;
@@ -155,14 +155,14 @@ bool CubeLUT::parseLUTParameters(std::istream& infile, std::streamoff& linePos) 
 			line >> size;
 			if (size < LUT_3D_MIN_SIZE || size > LUT_3D_MAX_SIZE)
 			{
-				const auto errorMsg = fmt::format("3D LUT size ({}) is out of range <{}, {}>", size, LUT_3D_MIN_SIZE, LUT_3D_MAX_SIZE);
+				const auto errorMsg = std::format("3D LUT size ({}) is out of range <{}, {}>", size, LUT_3D_MIN_SIZE, LUT_3D_MAX_SIZE);
 				throw std::runtime_error(errorMsg);
 			}
 			type = LUTType::LUT3D;
 		}
 		else
 		{
-			std::cerr << fmt::format("[WARNING] Unknown or repeated keyword: {} \n", keyword);
+			std::cerr << std::format("[WARNING] Unknown or repeated keyword: {} \n", keyword);
 		}
 
 		if (line.fail())
