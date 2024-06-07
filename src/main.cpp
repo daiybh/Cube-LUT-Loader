@@ -8,11 +8,11 @@
  * @license MIT
  *
  */
-
+#include <cli/cli.hpp>
 #include <TaskDispatcher/TaskDispatcher.hpp>
 
 int main(int argc, char* argv[])
-{
+{	
 	TaskDispatcher programEntry(argc, argv);
 	return programEntry.start();
 }

@@ -5,31 +5,34 @@ InputParams::InputParams(CLI::App&& vm) {
 }
 
 void InputParams::parseInputParams(CLI::App&& vm) {
-	if (vm.count("gpu")) {
+	if (vm.count("--gpu")) {
 		processingMode = ProcessingMode::GPU;
 	}
 
-	if (vm.count("trilinear")) {
+	if (vm.count("--trilinear")) {
 		interpolationMethod = InterpolationMethod::Trilinear;
 	}
-	else if (vm.count("nearest_value")) {
+	else if (vm.count("--nearest_value")) {
 		interpolationMethod = InterpolationMethod::NearestValue;
 	}
 
-	setParam("help", showHelp, vm);
-	setParam("force", forceOverwrite, vm);
-	setParam("input", inputImgPath, vm);
-	setParam("output", outputImgPath, vm);
-	setParam("lut", inputLutPath, vm);
-	setParam("strength", effectStrength, vm);
-	setParam("threads", threads, vm);
+	setParam("--help", showHelp, vm);
+	setParam("--force", forceOverwrite, vm);
+	setParam("--input", inputImgPath, vm);
+	setParam("--output", outputImgPath, vm);
+	if (outputImgPath.empty()) {
+	outputImgPath = "out.png";
+		}
+	setParam("--lut", inputLutPath, vm);
+	setParam("--strength", effectStrength, vm);
+	setParam("--threads", threads, vm);
 
 	const auto verifyUnsignedInt = [](int value) {
 		return value > 0;
 	};
 
-	setParam<int>("width", outputImageWidth, vm, verifyUnsignedInt);
-	setParam<int>("height", outputImageHeight, vm, verifyUnsignedInt);
+	setParam<int>("--width", outputImageWidth, vm, verifyUnsignedInt);
+	setParam<int>("--height", outputImageHeight, vm, verifyUnsignedInt);
 }
 
 ProcessingMode InputParams::getProcessingMode() const {

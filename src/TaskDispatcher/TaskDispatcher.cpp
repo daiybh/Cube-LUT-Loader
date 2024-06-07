@@ -20,15 +20,12 @@ TaskDispatcher::TaskDispatcher(const int aCnt, char *aVal[])
 
 int TaskDispatcher::start()
 {
+	
 	InputParams parameters;
 	try
 	{
 		std::string helpText;
-		parameters = parseInputArgs(helpText);
-		if (parameters.getShowHelp()) {
-			std::cout << "--HELP--\n" << helpText;
-			return SUCCESS_EXIT;
-		}
+		parameters = parseInputArgs(helpText);		
 	}
 	catch (const std::exception &ex)
 	{
@@ -92,11 +89,11 @@ int TaskDispatcher::start()
 }
 
 InputParams TaskDispatcher::parseInputArgs(std::string& helpText) const
-{	
+{		
 	CLI::App app("cube_lut_loader");
 	app.add_option("-i,--input", "Input file path")->required();
 	app.add_option("-l,--lut", "LUT file path")->required();
-	app.add_option("-o,--output", "Output file path [= out.png]");
+	app.add_option("-o,--output", "Output file path [= out.png]")->default_str("c:\\ftp\\outxxxx.png");
 	app.add_option("-f,--force", "Force overwrite file");
 	app.add_option("-s,--strength", "Strength of the effect [= 1.0]");
 	app.add_option("-t,--trilinear", "Trilinear interpolation of 3D LUT");
@@ -106,7 +103,13 @@ InputParams TaskDispatcher::parseInputArgs(std::string& helpText) const
 	app.add_option("-w,--width", "Output image width");
 	app.add_option("-x,--height", "Output image height");
 	//app.add_option("--help", "Help screen");
-	app.parse(argCount, args);
+	
+	try {                                                                                                              \
+        app.parse(argCount,args);                                                                                      \
+    } catch(const CLI::ParseError &e) {                                                                                \
+       // app.exit(e);   
+		throw std::runtime_error(app.help());
+    }
 	/*
 	boost::program_options::options_description desc{"Options"};
 	desc.add_options()
@@ -136,16 +139,16 @@ InputParams TaskDispatcher::parseInputArgs(std::string& helpText) const
 		return params;
 	}/**/
 #define vm app
-	if (!vm.count("input") || !vm.count("lut"))
+	if (!vm.count("--input") || !vm.count("--lut"))
 	{
 		//throw boost::program_options::error("No input image/LUT specified!");
 	}
 
-	if (vm.count("trilinear") && vm.count("nearest_value")) {
+	if (vm.count("--trilinear") && vm.count("--nearest_value")) {
 		std::cout << "[WARNING] Ambiguous input: multiple interpolation methods specified. Using trilinear.\n";
 	}
 
-	if ((vm.count("width") || vm.count("height")) && !(vm.count("width") && vm.count("height"))) {
+	if ((vm.count("--width") || vm.count("--height")) && !(vm.count("--width") && vm.count("--height"))) {
 		std::cout << "[WARNING] Not all output image dimensions have been specified.\n";
 	}
 
